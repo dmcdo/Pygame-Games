@@ -1,4 +1,3 @@
-from hashlib import new
 from sys import exit
 from time import sleep, time
 from random import randint
