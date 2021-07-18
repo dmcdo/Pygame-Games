@@ -83,6 +83,7 @@ class TetrisGame:
 
         # Loop gameplay until the player closes the window
         # Initialize grid
+        welcome = True
         while True:
             self.grid = self.grid = [
                 [None] * self.cols for _ in range(self.rows)
@@ -106,16 +107,37 @@ class TetrisGame:
                         dx, dy, self.tile_length, self.tile_length)
 
             # Draw the board
-            self.draw_everything(init=True, resize=True)
+            self.draw_everything(init=True, resize=True, welcome=welcome)
             pygame.display.flip()
+
+            # Initial wait for user to start the game
+            if welcome:
+                welcome = False
+                new_game = False
+                while not new_game:
+                    frame_time = time()
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            self.sysexit()
+                        elif event.type == pygame.WINDOWRESIZED:
+                            self.draw_everything(resize=True, welcome=True, init=True)
+                            pygame.display.flip()
+                        elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                            new_game = True
+                    delta = time() - frame_time
+                    if delta < FRAMERATE:
+                        sleep(FRAMERATE - delta)
+                self.draw_everything(init=True)
 
             # Start the game
             self.eventloop()
+            
             self.draw_everything(gameover=True)
             pygame.display.flip()
 
             new_game = False
             while not new_game:
+                frame_time = time()
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         self.sysexit()
@@ -124,6 +146,9 @@ class TetrisGame:
                         pygame.display.flip()
                     elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                         new_game = True
+                delta = time() - frame_time
+                if delta < FRAMERATE:
+                    sleep(FRAMERATE - delta)
 
     # Main event loop. Will block until the game ends.
     def eventloop(self):
@@ -194,6 +219,7 @@ class TetrisGame:
         pygame.display.flip()
 
         while True:
+            frame_time = time()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.sysexit()
@@ -204,6 +230,9 @@ class TetrisGame:
                     self.draw_everything()
                     pygame.display.flip()
                     return
+            delta = time() - frame_time
+            if delta < FRAMERATE:
+                sleep(FRAMERATE - delta)
 
     # Move the current tetramino in a given direction based on user input
 
@@ -469,7 +498,7 @@ class TetrisGame:
                 self.draw(color=COLOR_SHADOW, y=self.lowest_y())
                 self.draw()
                 self.draw(next=True)
-            if kwargs.get('gameover'):
+            if kwargs.get('gameover') or kwargs.get('welcome'):
                 font1 = pygame.font.SysFont(
                     pygame.font.get_default_font(),
                     self.tile_length * 2
@@ -478,7 +507,11 @@ class TetrisGame:
                     pygame.font.get_default_font(),
                     int(self.tile_length * 1.3)
                 )
-                s1 = font1.render("GAME OVER", True, COLOR_TEXT)
+                s1 = font1.render(
+                    "GAME OVER" if kwargs.get('gameover') else "WELCOME",
+                    True,
+                    COLOR_TEXT
+                )
                 s2 = font2.render("PRESS ENTER TO", True, COLOR_TEXT)
                 s3 = font2.render("START A NEW GAME", True, COLOR_TEXT)
 

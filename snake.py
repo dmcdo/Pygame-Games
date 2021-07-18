@@ -81,6 +81,7 @@ class SnakeGame:
                     if event.type == pygame.KEYDOWN and event.key in DIRMAP:
                         waiting = False
                         self.direction = DIRMAP[event.key][0]
+                time.sleep(self.speed)
 
             # Play the game
             msg_surface.fill(COLOR_BACKGROUND)
@@ -156,6 +157,7 @@ class SnakeGame:
                     if event.key in DIRMAP and DIRMAP[event.key][1] != self.direction:
                         self.dirqueue.put_nowait(DIRMAP[event.key][0])
                         return
+            time.sleep(self.speed)
 
     def game_over(self):
         # Display game over message and wait for user to take action
@@ -170,6 +172,7 @@ class SnakeGame:
                     self.sysexit()
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                     return
+            time.sleep(self.speed)
 
     # Calculate the next (x, y) position based on the current direction
     def next_xy(self):
