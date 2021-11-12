@@ -36,7 +36,7 @@ class SnakeGame:
         self.speed = speed
 
         pygame.font.init()
-        self.font = pygame.font.SysFont(pygame.font.get_default_font(), 30)
+        self.font = pygame.font.Font('freesansbold.ttf', 24)
 
         pygame.init()
         self.screen = pygame.display.set_mode((self.width, self.height))

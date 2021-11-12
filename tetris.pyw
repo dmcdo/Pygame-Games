@@ -463,13 +463,13 @@ class TetrisGame:
             )
             pygame.draw.rect(self.screen, COLOR_PAUSE, curtain)
 
-            font1 = pygame.font.SysFont(
-                pygame.font.get_default_font(),
-                self.tile_length * 2
+            font1 = pygame.font.Font(
+                'freesansbold.ttf',
+                int(self.tile_length * 1.7)
             )
-            font2 = pygame.font.SysFont(
-                pygame.font.get_default_font(),
-                int(self.tile_length * 1.5)
+            font2 = pygame.font.Font(
+                'freesansbold.ttf',
+                int(self.tile_length * 1.3)
             )
             s1 = font1.render("PAUSED", True, COLOR_TEXT)
             s2 = font2.render("PRESS ENTER", True, COLOR_TEXT)
@@ -499,13 +499,13 @@ class TetrisGame:
                 self.draw()
                 self.draw(next=True)
             if kwargs.get('gameover') or kwargs.get('welcome'):
-                font1 = pygame.font.SysFont(
-                    pygame.font.get_default_font(),
-                    self.tile_length * 2
+                font1 = pygame.font.Font(
+                    'freesansbold.ttf',
+                    int(self.tile_length * 1.5)
                 )
-                font2 = pygame.font.SysFont(
-                    pygame.font.get_default_font(),
-                    int(self.tile_length * 1.3)
+                font2 = pygame.font.Font(
+                    'freesansbold.ttf',
+                    int(self.tile_length * 0.9)
                 )
                 s1 = font1.render(
                     "GAME OVER" if kwargs.get('gameover') else "WELCOME",
@@ -546,8 +546,8 @@ class TetrisGame:
                     text_end
                 ))
 
-        font = pygame.font.SysFont(
-            pygame.font.get_default_font(), int(self.tile_length * 1.5))
+        font = pygame.font.Font(
+            'freesansbold.ttf', int(self.tile_length * 1.5))
         text_next = font.render("NEXT", True, COLOR_TEXT)
         self.screen.blit(text_next,
                          (self.tile_length * (self.cols + PREVIEW_OFFSET), self.tile_length // 2))
